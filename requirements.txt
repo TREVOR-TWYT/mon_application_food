@@ -1,0 +1,7 @@
+Flask
+requests
+jsonify 
+flash
+Flask-SQLAlchemy
+google-genai
+psycopg2

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Poser une Question</title>
+</head>
+<body>
+    <h1>Posez votre question</h1>
+    <form method="POST">
+        <label for="question">Votre question :</label>
+        <input type="text" id="question" name="question" required>
+        <button type="submit">Envoyer</button>
+    </form>
+
+    <hr>
+
+    {% if response %}
+    <h2>Réponse :</h2>
+    <p>{{ response }}</p>
+    {% endif %}
+</body>
+</html>

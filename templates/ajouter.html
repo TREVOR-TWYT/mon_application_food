@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter</title>
+</head>
+<body>
+    <h1>Ajouter une Personne, Nourriture et Ingrédients</h1>
+    <form method="POST">
+        <h2>Personne</h2>
+        <label for="name_personne">Nom :</label>
+        <input type="text" id="name_personne" name="name_personne" required>
+        <label for="age_personne">Âge :</label>
+        <input type="number" id="age_personne" name="age_personne">
+
+        <h2>Nourriture</h2>
+        <label for="name_food">Nom de la Nourriture :</label>
+        <input type="text" id="name_food" name="name_food" required>
+        <label for="description_food">Description :</label>
+        <input type="text" id="description_food" name="description_food">
+
+        <h2>Ingrédients</h2>
+        <label for="ingredients">Ingrédients (séparés par des virgules) :</label>
+        <input type="text" id="ingredients" name="ingredients">
+
+        <button type="submit">Ajouter</button>
+    </form>
+</body>
+</html>
