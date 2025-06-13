@@ -10,6 +10,7 @@ app.secret_key = 'b\xae\x1b\x02A\x83\x00\xd7X\xe4u\x83e\xb1\x1a\x84\x7f\xa8w\xcb
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://trevor:TREFRIED1707@localhost/fooddb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+client = genai.Client(api_key='AIzaSyD3ioFlYYUPA4gTqHmn2acvzuSpg-f21Qs')
 
 # Modèles (Personne, Food, Image, Ingredient, Allergie) 
 
@@ -61,40 +62,28 @@ class Allergie(db.Model):
 
 def obtenir_reponse_gemini(question):
     try:
-        client = genai.Client(
-            api_key=os.environ.get("AIzaSyD3ioFlYYUPA4gTqHmn2acvzuSpg-f21Qs"),
-            endpoint="https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD3ioFlYYUPA4gTqHmn2acvzuSpg-f21Qs"
-        )
+        chat = client.chats.create(model='gemini-2.0-flash')
+        response = chat.send_message(question)
 
-        model = "gemini-2.5-pro-preview-06-05"
-        contents = [
-            types.Content(
-                role="user",
-                parts=[
-                    types.Part.from_text(text=question),
-                ],
-            ),
-        ]
-        generate_content_config = types.GenerateContentConfig(
-            response_mime_type="text/plain",
-        )
+        # Extraction de la réponse
+        if response.candidates and len(response.candidates) > 0:
+            # Accéder au premier candidat
+            first_candidate = response.candidates[0]
+            # Accéder au contenu
+            content = first_candidate.content
+            # Extraire le texte
+            text_response = content.parts[0].text
+            
+            return text_response
+        else:
+            return "Aucune réponse trouvée."
 
-        response_text = ""
-        for chunk in client.models.generate_content_stream(
-            model=model,
-            contents=contents,
-            config=generate_content_config,
-        ):
-            response_text += chunk.text
-
-        return response_text
-        
     except Exception as e:
         print(f"Erreur lors de l'obtention de la réponse : {e}")
         return "Erreur lors de la génération de la réponse"
 
-@app.route('/')
-def Acceuil():
+@app.route("/", methods=["GET"])
+def acceuil():
     return render_template('Acceuil.html')
 
 @app.route('/poser-question', methods=['GET', 'POST'])
