@@ -60,29 +60,38 @@ class Allergie(db.Model):
     food_id = db.Column(db.Integer, db.ForeignKey('foods.id'), primary_key=True)
 
 def obtenir_reponse_gemini(question):
-    client = genai.Client(
-        api_key=os.environ.get("AIzaSyD3ioFlYYUPA4gTqHmn2acvzuSpg-f21Qs"),
-    )
+    try:
+        client = genai.Client(
+            api_key=os.environ.get("AIzaSyD3ioFlYYUPA4gTqHmn2acvzuSpg-f21Qs"),
+            endpoint="https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD3ioFlYYUPA4gTqHmn2acvzuSpg-f21Qs"
+        )
 
-    model = "gemini-2.5-pro-preview-06-05"
-    contents = [
-        types.Content(
-            role="user",
-            parts=[
-                types.Part.from_text(text=question),
-            ],
-        ),
-    ]
-    generate_content_config = types.GenerateContentConfig(
-        response_mime_type="text/plain",
-    )
+        model = "gemini-2.5-pro-preview-06-05"
+        contents = [
+            types.Content(
+                role="user",
+                parts=[
+                    types.Part.from_text(text=question),
+                ],
+            ),
+        ]
+        generate_content_config = types.GenerateContentConfig(
+            response_mime_type="text/plain",
+        )
 
-    for chunk in client.models.generate_content_stream(
-        model=model,
-        contents=contents,
-        config=generate_content_config,
-    ):
-        print(chunk.text, end="")
+        response_text = ""
+        for chunk in client.models.generate_content_stream(
+            model=model,
+            contents=contents,
+            config=generate_content_config,
+        ):
+            response_text += chunk.text
+
+        return response_text
+        
+    except Exception as e:
+        print(f"Erreur lors de l'obtention de la réponse : {e}")
+        return "Erreur lors de la génération de la réponse"
 
 @app.route('/poser-question', methods=['GET', 'POST'])
 def poser_question():
