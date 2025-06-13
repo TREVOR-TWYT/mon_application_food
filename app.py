@@ -93,6 +93,10 @@ def obtenir_reponse_gemini(question):
         print(f"Erreur lors de l'obtention de la réponse : {e}")
         return "Erreur lors de la génération de la réponse"
 
+@app.route('/')
+def Acceuil():
+    return render_template('Acceuil.html')
+
 @app.route('/poser-question', methods=['GET', 'POST'])
 def poser_question():
     response = None
