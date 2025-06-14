@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Sélectionner un Élément à Ajouter</title>
+</head>
+<body>
+    <h1>Sélectionnez un Élément à Ajouter</h1>
+    <ul>
+        <li><a href="{{ url_for('ajouter_personne') }}">Ajouter une Personne</a></li>
+        <li><a href="{{ url_for('ajouter_nourriture') }}">Ajouter une Nourriture</a></li>
+        <li><a href="{{ url_for('ajouter_allergie') }}">Ajouter une Allergie</a></li>
+        <li><a href="{{ url_for('add_image') }}">Ajouter une Image</a></li>
+        <li><a href="{{ url_for('manger') }}">Relier une Personne à une Nourriture</a></li>
+    </ul>
+</body>
+</html>

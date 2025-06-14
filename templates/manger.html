@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Relier une Personne à une Nourriture</title>
+</head>
+<body>
+    <h1>Relier une Personne à une Nourriture</h1>
+    <form method="POST">
+        <label for="personne_id">Sélectionner une Personne :</label>
+        <select name="personne_id" required>
+            {% for personne in personnes %}
+                <option value="{{ personne.id }}">{{ personne.name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="food_id">Sélectionner une Nourriture :</label>
+        <select name="food_id" required>
+            {% for food in foods %}
+                <option value="{{ food.id }}">{{ food.name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Relier</button>
+    </form>
+</body>
+</html>

@@ -19,6 +19,7 @@ COPY . .
 # Exposer le port de l'application
 EXPOSE 5000
 
+
 # Commande pour exécuter l'application
 CMD ["flask", "run", "--host=0.0.0.0"]
 

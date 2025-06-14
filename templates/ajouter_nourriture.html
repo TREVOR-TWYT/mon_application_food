@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter une Nourriture</title>
+</head>
+<body>
+    <h1>Ajouter une Nourriture</h1>
+    <form method="POST">
+        <label for="name_food">Nom de la Nourriture :</label>
+        <input type="text" name="name_food" required>
+        <br>
+        <label for="description_food">Description :</label>
+        <textarea name="description_food" required></textarea>
+        <br>
+        <label for="image_url">URL de l'Image :</label>
+        <input type="text" name="image_url">
+        <br>
+        <label for="ingredients">Ingrédients :</label>
+        <input type="text" name="ingredients" placeholder="Séparez par des virgules">
+        <br>
+        <button type="submit">Ajouter</button>
+    </form>
+    <a href="{{ url_for('login') }}">Retour</a>
+</body>
+</html>

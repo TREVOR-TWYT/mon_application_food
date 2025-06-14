@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter une Personne</title>
+</head>
+<body>
+    <h1>Ajouter une Personne</h1>
+    <form method="POST">
+        <label for="name_personne">Nom :</label>
+        <input type="text" name="name_personne" required>
+        <br>
+        <label for="age_personne">Âge :</label>
+        <input type="number" name="age_personne" required>
+        <br>
+        <label for="sexe_personne">Sexe :</label>
+        <select name="sexe_personne" required>
+            <option value="Homme">Homme</option>
+            <option value="Femme">Femme</option>
+            <option value="Autre">Autre</option>
+        </select>
+        <br>
+        <button type="submit">Ajouter</button>
+    </form>
+    <a href="{{ url_for('login') }}">Retour</a>
+</body>
+</html>

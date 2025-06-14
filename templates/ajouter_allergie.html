@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter une Allergie</title>
+</head>
+<body>
+    <h1>Ajouter une Allergie</h1>
+    <form method="POST">
+        <label for="name_allergie">Nourriture provoquant l'allergie :</label>
+        <select food_id="food_id" required>
+            {% for nourriture in nourritures %}
+                <option value="{{ nourriture.id }}">{{ nourriture.name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="personne_id">Sélectionner une Personne :</label>
+        <select name="personne_id" required>
+            {% for personne in personnes %}
+                <option value="{{ personne.id }}">{{ personne.name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Ajouter</button>
+    </form>
+    <a href="{{ url_for('login') }}">Retour</a>
+</body>
+</html>

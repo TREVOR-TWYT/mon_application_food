@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  my_postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: fooddb
+    ports:
+      - "5433:5432"
+
+  app:
+    build: .
+    depends_on:
+      - my_postgres
+    environment:
+      DATABASE_URL: "postgresql+psycopg2://postgres:postgres@my_postgres:5432/foodapp"
+    ports:
+      - "5000:5000"
