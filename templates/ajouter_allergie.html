@@ -7,8 +7,8 @@
 <body>
     <h1>Ajouter une Allergie</h1>
     <form method="POST">
-        <label for="name_allergie">Nourriture provoquant l'allergie :</label>
-        <select food_id="food_id" required>
+        <label for="food_id">Nourriture provoquant l'allergie :</label>
+        <select name="food_id" required>
             {% for nourriture in nourritures %}
                 <option value="{{ nourriture.id }}">{{ nourriture.name }}</option>
             {% endfor %}
@@ -23,6 +23,6 @@
         <br>
         <button type="submit">Ajouter</button>
     </form>
-    <a href="{{ url_for('login') }}">Retour</a>
+    <a href="{{ url_for('selectionner') }}">Retour</a>
 </body>
 </html>

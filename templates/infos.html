@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nourritures</title>
+</head>
+<body>
+    <h1>Informations Personnelles</h1>
+    <p><strong>Nom:</strong> {{ nom }}</p>
+    <p><strong>Sexe:</strong> {{ sexe }}</p>
+    <p><strong>Âge:</strong> {{ age }}</p>
+
+    <h1>Nourritures Mangées</h1>
+    <ul>
+        {% for nourriture in nourritures %}
+            <li>{{ nourriture }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Allergies</h2>
+    <ul>
+        {% if allergies %}
+            {% for allergie in allergies %}
+                <li>Allergie à la nourriture: {{ allergie }}</li>
+            {% endfor %}
+        {% else %}
+            <li>Aucune allergie enregistrée.</li>
+        {% endif %}
+    </ul>
+
+    <a href="{{ url_for('login') }}">Retour</a>
+</body>
+</html>

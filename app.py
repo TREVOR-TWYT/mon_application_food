@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 import base64
 import os
 from google import genai
@@ -7,18 +9,18 @@ from google.genai import types
 
 app = Flask(__name__)
 app.secret_key = 'b\xae\x1b\x02A\x83\x00\xd7X\xe4u\x83e\xb1\x1a\x84\x7f\xa8w\xcb\xc7O\xff\xfd\x01'  # Nécessaire pour les messages flash
-app.config['SQLALCHEMY_DATABASE_URI'] ="postgresql+psycopg2://postgres:postgres@my_postgres:5432/foodapp"
+app.config['SQLALCHEMY_DATABASE_URI'] ="postgresql+psycopg2://trevor:TREFRIED1707@my_postgres:5432/fooddb"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 first_request_done = False
 
-"""@app.before_request
+@app.before_request
 def initialize_tables():
     global first_request_done
     if not first_request_done:
         db.create_all()  # Ou toute autre initialisation
-        first_request_done = True  # Marquez comme fait"""
+        first_request_done = True  # Marquez comme fait
 
 client = genai.Client(api_key='AIzaSyD3ioFlYYUPA4gTqHmn2acvzuSpg-f21Qs')
 
@@ -27,7 +29,7 @@ client = genai.Client(api_key='AIzaSyD3ioFlYYUPA4gTqHmn2acvzuSpg-f21Qs')
 # Modèle pour la table Personne
 class Personne(db.Model):
     __tablename__ = 'personne'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False)
     age = db.Column(db.Integer, nullable=False)
     sexe = db.Column(db.String, nullable=False)
@@ -35,7 +37,7 @@ class Personne(db.Model):
 # Modèle pour la table Foods
 class Food(db.Model):
     __tablename__ = 'foods'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
     image = db.Column(db.String, nullable=True)
@@ -43,7 +45,7 @@ class Food(db.Model):
 
 class Manger(db.Model):
     __tablename__ = 'manger'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(Integer, primary_key=True, autoincrement=True)
     personne_id = db.Column(db.Integer, db.ForeignKey('personne.id'), nullable=False)
     food_id = db.Column(db.Integer, db.ForeignKey('foods.id'), nullable=False)
 
@@ -67,6 +69,7 @@ class Ingredient(db.Model):
 # Modèle pour la table Allergies
 class Allergie(db.Model):
     __tablename__ = 'allergies'
+    id = db.Column(Integer, primary_key=True, autoincrement=True)
     personne_id = db.Column(db.Integer, db.ForeignKey('personne.id'), primary_key=True)
     food_id = db.Column(db.Integer, db.ForeignKey('foods.id'), primary_key=True)
 
@@ -120,12 +123,10 @@ def add_image():
 @app.route('/ajouter/allergie', methods=['GET', 'POST'])
 def ajouter_allergie():
     if request.method == 'POST':
+        personne_id = request.form['personne_id']
         food_id = request.form['food_id']
-        personne_id = request.form['personne_id']  # Récupérer l'ID de la personne
-
-        # Ajouter la nouvelle allergie
-        nouvelle_allergie = Allergie(food_id=food_id, personne_id=personne_id)
-        db.session.add(nouvelle_allergie)
+        new_allergie = Allergie(personne_id=personne_id, food_id=food_id)
+        db.session.add(new_allergie)
         db.session.commit()
 
         return "Allergie ajoutée avec succès!"
@@ -140,13 +141,25 @@ def ajouter_allergie():
 def login():
     if request.method == 'POST':
         name = request.form['name']
-        personne = Personne.query.filter_by(nom=name).first()
+        personne = Personne.query.filter_by(name=name).first()
         if personne:
             # Récupérer les nourritures mangées par la personne
-            nourritures = db.session.query(Food).join(Allergie).filter(Allergie.personne_id == personne.id).all()
-            return render_template('nourritures.html', nourritures=[food.name for food in nourritures])
+            nourritures = db.session.query(Food).join(Manger).filter(Manger.personne_id == personne.id).all()
+            
+            # Récupérer les allergies de la personne avec les noms des aliments
+            allergies = db.session.query(Allergie).filter(Allergie.personne_id == personne.id).all()
+            allergies_noms = [db.session.query(Food.name).filter(Food.id == allergie.food_id).scalar() for allergie in allergies]
+
+            return render_template('infos.html', 
+                                   nourritures=[food.name for food in nourritures],
+                                   allergies=allergies_noms,
+                                   nom=personne.name,
+                                   sexe=personne.sexe,
+                                   age=personne.age)
+
         flash('Nom d\'utilisateur non trouvé.')
         return redirect(url_for('login'))
+
     return render_template('login.html')
 
 @app.route('/nourritures', methods=['GET'])

@@ -8,6 +8,11 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Installez le client PostgreSQL
+RUN apt-get update && apt-get install -y postgresql-client
+
+# Autres instructions pour votre application...
+
 # Définir le répertoire de travail
 WORKDIR /FOODAPP
 

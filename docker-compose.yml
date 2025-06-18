@@ -2,19 +2,20 @@ version: '3.8'
 services:
   my_postgres:
     image: postgres:latest
-    restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: trevor
+      POSTGRES_PASSWORD: TREFRIED1707
       POSTGRES_DB: fooddb
     ports:
       - "5433:5432"
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - my_postgres
-    environment:
-      DATABASE_URL: "postgresql+psycopg2://postgres:postgres@my_postgres:5432/foodapp"
     ports:
       - "5000:5000"
+    environment:
+      SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://trevor:TREFRIED1707@my_postgres:5432/fooddb"
