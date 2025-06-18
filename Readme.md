@@ -1,16 +1,4 @@
-# Université de Yaoundé I / University of Yaounde I  
-### Faculté des sciences / Faculty of Sciences  
-#### Département d’informatique / Computer Science Department  
-
----
-
-# RAPPORT TP INF222
-
-**TCHANA YOTAT WILFRIED TREVOR**  
-**Matricule : 23U2551**  
-**Examinateur : Dr Jiomekong**
-
----
+# RAPPORT PROJET
 
 ## 1. Introduction
 
